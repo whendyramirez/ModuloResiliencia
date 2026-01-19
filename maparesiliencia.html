@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Resiliencia</title>
+  <meta charset="utf-8">
+<! -- meta name="viewport" content="width=device-width, initial-scale=1" -->
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/global1.css">
+  <link rel="icon" href="https://transparencia-climatica.miambiente.gob.pa/wp-content/uploads/2020/08/cropped-Bandera-para-favicon-192x192.png" sizes="192x192" />
+    <style>
+        #map {
+        height: 650px;
+        width: 120%;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+  </style>
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-sm navbar-dark " style="background-color: #002662">
+  <!-- Brand -->
+    <a><img src="imagen/Header2.png" alt="Ministerio De Ambiente" style="width:450px; height:120px"></a>
+  <p><br></p>
+ 
+  <!-- Links -->
+  <ul class="navbar-nav nav justify-content-end" <br>
+    <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Acerca de PNTC</a>
+    </li>
+     <li class="nav-item">
+      <a class="nav-link" href="#">Publicaciones</a>
+    </li>
+     <li class="nav-item">
+      <a class="nav-link" href="#">Dirección de Cambio Climatico</a>
+    </li>
+    <!-- Dropdown -->
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        Módulos
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">Observatorio</a>
+        <a class="dropdown-item" href="resiliencia2.html">Resiliencia</a> 
+      </div>
+    </li>
+     <li class="nav-item">
+      <a class="nav-link" href="#">Inicio de Sesión</a>
+    </li>
+  </ul>
+
+</nav>
+<nav class="navbar" style="background-color: #002662">
+  <!-- Brand -->
+  <a><img src="imagen/Logo-Resiliencia-blanco-1-qkvg11i2t7w2bgmhv9xolh809nn4qkv0nnbndck4oc.png" alt="Ministerio De Ambiente" style="width:100px;height:100px;"></a>
+  <h2>Módulo de Resiliencia Climatica</h2>
+ 
+</nav>
+<div class="container">
+  <div class="row">
+      <div class="col-md-3">
+          <nav class="navbar bg-light">
+            <ul class="navbar-nav  nav-justified">
+                <li class="nav-item">
+                  <a class="nav-link" href="resiliencia2.html">Conoce a Resiliencia</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="programas.html">Proyectos</a>
+                </li>
+                <li class="nav-item">
+                  <a target="top" class="nav-link" href="marcolegal.html">Marco Legal</a>
+                </li>
+                <li class="nav-item">
+                  <a target="top" class="nav-link" href="#">Institucionalidad</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link-active1" href="#">Herramientas</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Preguntas Frecuentes</a>
+                </li>
+            </ul>
+          </nav>
+      </div>
+    <div class="col-md-9">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="herramientas.html">Indice de Resiliencia</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="maparesiliencia.html">Mapa Interactivo</a>
+                </li>
+            </ul>
+
+                <h3>Mapa Interactivo</h3>
+                <div id="map"></div>
+
+<script>
+// ------------------------------------------
+// 1. MAPA INICIAL
+// ------------------------------------------
+ var map = L.map('map').setView([8.4877054, -80.3146548], 8) // Coordenadas de Panamá, por ejemplo
+ 
+
+// ------------------------------------------
+// 2. CAPA MAPA BASE
+// ------------------------------------------
+var capaMapa = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18
+}).addTo(map);
+
+// ------------------------------------------
+// 3. CAPA SATÉLITE
+// ------------------------------------------
+var capaSatelite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    { maxZoom: 18 }
+);
+
+//Híbrida (satélite con nombres encima)
+var hibrido = L.tileLayer(
+  'https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+  { subdomains: ['mt0','mt1','mt2','mt3'] }
+);
+
+//Capa Topografía
+var topografico = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png');
+
+// ------------------------------------------
+// 4. COLORES POR PROVINCIA
+// ------------------------------------------
+function provinciaPorID(id) {
+    const mapa = {
+        1: "Bocas del Toro",
+        2: "Coclé",
+        3: "Colón",
+        4: "Chiriquí",
+        5: "Darién",
+        6: "Herrera",
+        7: "Los Santos",
+        8: "Panamá",
+        9: "Veraguas",
+        10: "Panamá Oeste",
+        11: "Comarca Guna Yala",
+        13: "Comarca Ngäbe-Buglé",
+        12: "Comarca Emberá-Wounaan",
+        14: "Comarca Guna de Madungandí",
+        15: "Comarca Guna de Wargandí",
+        16: "Comarca Naso Tjër Di"
+    };
+    return mapa[id] || "Desconocido";
+}
+var colores = {
+    "bocas del toro": "#ff0000",
+    "cocle": "#00aa00",
+    "colon": "#ff0066",
+    "chiriqui": "#0606bcff",
+    "darien": "#996600",
+    "herrera": "#00cccc",
+    "los santos": "#cc00cc",
+    "panama": "#0099ffc7",
+    "panama oeste": "#800080",
+    "veraguas": "#ff8800",
+    "comarca ngabe-bugle": "#ca0404ff",
+    "comarca guna yala": "#ff006fff",
+    "comarca embera-wounaan": "#f1b7ffff",
+    "comarca naso tejer di": "#00ff",
+    "comarca guna madungandi": "#ffb92cff",
+    "comarca guna de wargandi": "#08afddff"
+};
+
+function normalizar(nombre) {
+    return nombre
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
+
+// CAPA CONTENEDORA
+var capaProvincias = L.layerGroup();
+
+
+// ------------------------------------------
+// 5. OBTENER LOS DATOS DESDE PHP/MySQL
+// ------------------------------------------
+fetch("datos_mapa.php")
+    .then(res => res.json())
+    .then(data => {
+
+        data.forEach(item => {
+
+            // Convertir ID → Nombre
+            let provinciaNombre = provinciaPorID(item.provincia);
+
+            // Normalizar para buscar color
+            let key = normalizar(provinciaNombre);
+
+            // Obtener color final
+            let color = colores[key] || "black";
+
+            // Crear marcador coloreado
+            L.circleMarker([item.latitudG,item.longG], {
+                radius: 5,
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.9
+            })
+            .bindPopup(
+                "<b>Provincia:</b> " + provinciaNombre +
+                "<br><b>Distrito:</b> " + item.distritos+
+                "<br><b>Latitud:</b> " + item.latitudG +
+                "<br><b>Longitud:</b> " + item.longG +
+                "<br><b>Proyecto:</b> " + item.nombreProyecto               
+            )
+            .addTo(capaProvincias);
+
+        });
+
+    })
+    .catch(err => console.error("Error:", err));
+
+// ------------------------------------------
+// 6. CONTROL DE CAPAS
+// ------------------------------------------
+var overlayMaps = {
+    "Proyectos por Provincias": capaProvincias
+};
+
+var baseMaps = {
+   "Mapa": capaMapa,
+    "Satélite": capaSatelite,
+    "Híbrida":hibrido,
+    "Topografíco": topografico
+};
+
+
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+                
+                </script>
+
+    </div>
+  </div>
+</div> 
+
+            <div class="footer-widget-area">
+              <p>Copyright © 2025 | Ministerio de Ambiente</p>
+            </div>
+</body>
+</html>
