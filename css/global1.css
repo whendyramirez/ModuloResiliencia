@@ -286,25 +286,13 @@ height: 100%;
     }
 
 /*************** Carrusel*****************/
-.carousel-inner {
-  position: relative;
-  overflow: hidden;
+.carousel-inner img {
+   width: 100%;
+   height: 100%;
 }
 
 carousel-item{
   display: none; /* Oculta las diapositivas por defecto */
   width: 100%;
   transition: transform 0.5s ease-in-out; /* Efecto de deslizamiento */
-}
-
-carousel-item active {
-  display: block; /* Muestra la diapositiva activa */
-}
-
-/* Ejemplo de animación */
-carousel-item {
-  transform: translateX(100%); /* Desplaza fuera de vista */
-}
-carousel-item active {
-  transform: translateX(0); /* Muestra en posición */
 }
