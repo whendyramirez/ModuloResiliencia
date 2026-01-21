@@ -262,7 +262,7 @@ height: 100%;
 }
 .classic_carousel_placeholder {
     padding: 25px 25px 25px 25px;
-     background-color: #002662;
+     background-color: #013993;
 }
 
 .carousel-item {
@@ -274,7 +274,7 @@ height: 100%;
     transition: transform 0.5s ease-in-out; /* Efecto de deslizamiento */
 }
 
-.uc_classic_carousel_content {
+.classic_carousel_content {
     padding: 0px 20px 20px 20px;
     min-height: 0px;
 }
